@@ -20,33 +20,35 @@ jobSelect.addEventListener('input', (e) => {
 /***
  * T-Shirt Section
 ***/
-function hideColorSelect() {
+function hideShowColorSelect(showHide, textContent) {
     const colorSelect = document.getElementById('color');
-    colorSelect.hidden = true;
+    colorSelect.hidden = showHide;
     const colorLabel = document.querySelector('#colors-js-puns label');
-    colorLabel.textContent = 'Please select a T-shirt theme';
-}
-
-function showColorSelect() {
-    const colorSelect = document.getElementById('color');
-    colorSelect.hidden = false;
-    const colorLabel = document.querySelector('#colors-js-puns label');
-    colorLabel.textContent = 'Colors:'
+    colorLabel.textContent = textContent
 }
 
 const designSelect = document.getElementById('design');
-const colorOptions = document.getElementById('color').children;
 
+function colorDisplay(string) {
+    const colorOptions = document.getElementById('color').children;
+
+    for(let i = 0; i < colorOptions.length; i++) {
+        if(colorOptions[i].textContent.includes(string)) {
+            colorOptions[i].style.display = 'block';
+        }else {
+            colorOptions[i].style.display = 'none';
+        }
+    }
+}
 
 designSelect.addEventListener('input', (e) => {
     if(e.target.value === 'js puns'){
-        showColorSelect();
-        console.log('hi');
+        hideShowColorSelect(false, 'Colors:');
+        colorDisplay('JS Puns');
     }else if(e.target.value === 'heart js'){
-        showColorSelect();
-        console.log('yo');
+        hideShowColorSelect(false, 'Colors:');
+        colorDisplay('JS shirt');
     }else {
-        hideColorSelect();
-        console.log('sup');
+        hideShowColorSelect(true, 'Please select a T-shirt theme');
     }
 })
