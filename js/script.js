@@ -3,12 +3,12 @@ document.getElementById('name').focus();
 
 /*** 
  *  Job Role Section
- *  When other is checked, text box appears
 ***/
 const otherJob = document.getElementById('other-title');
 otherJob.hidden = true;
 const jobSelect = document.getElementById('title');
 
+// if jobSelect = 'other' then show text input box
 jobSelect.addEventListener('input', (e) => {
     if(e.target.value === 'other') {
         otherJob.hidden = false;
@@ -20,6 +20,7 @@ jobSelect.addEventListener('input', (e) => {
 /***
  * T-Shirt Section
 ***/
+// Shows and hides color options && updates the label text content
 function hideShowColorSelect(showHide, textContent) {
     const colorSelect = document.getElementById('color');
     colorSelect.hidden = showHide;
@@ -27,8 +28,7 @@ function hideShowColorSelect(showHide, textContent) {
     colorLabel.textContent = textContent
 }
 
-const designSelect = document.getElementById('design');
-
+// Only Displays color options that include the string value
 function colorDisplay(string) {
     const colorOptions = document.getElementById('color').children;
 
@@ -41,6 +41,9 @@ function colorDisplay(string) {
     }
 }
 
+const designSelect = document.getElementById('design');
+
+// Based on design input, updates color options 
 designSelect.addEventListener('input', (e) => {
     if(e.target.value === 'js puns'){
         hideShowColorSelect(false, 'Colors:');
@@ -52,3 +55,44 @@ designSelect.addEventListener('input', (e) => {
         hideShowColorSelect(true, 'Please select a T-shirt theme');
     }
 })
+
+/***
+ * Activites Section
+***/
+// Creates activities total cost below checkboxes
+let totalCost = 0;
+const activities = document.querySelector('.activities');
+const activitiesList = activities.querySelectorAll('input');
+const activityTotal = document.createElement('DIV');
+activityTotal.innerHTML = `<p id='total-cost'>Total: $0`;
+activities.appendChild(activityTotal);
+
+// Disable activities that conflict
+activities.addEventListener('input', (e) => {
+    const click = e.target;
+    const dateTime = click.getAttribute('data-day-and-time');
+    
+    for(i = 0; i < activitiesList.length; i++) {
+        const listDateTime = activitiesList[i].getAttribute('data-day-and-time');
+        
+        // If date&time of event clicked = another date&time &&
+        // event clicked doesn't equal input of event clicked, disable
+        if(dateTime === listDateTime && click !== activitiesList[i]) {
+            if(click.checked === true) {
+                activitiesList[i].parentNode.style.color = 'grey';
+                activitiesList[i].disabled = true;
+            }else if(click.checked === false) {
+                activitiesList[i].parentNode.style.color = '';
+                activitiesList[i].disabled = false;
+            }
+        }
+    }
+    // Update total cost tag
+    let activityCost = parseInt(click.getAttribute('data-cost'));
+    if(click.checked === true) {
+        totalCost += activityCost;
+    }else {
+        totalCost -= activityCost;
+    }
+    document.querySelector('#total-cost').innerText = `Total $${totalCost}`;
+});
