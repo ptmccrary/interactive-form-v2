@@ -52,7 +52,7 @@ designSelect.addEventListener('input', (e) => {
         hideShowColorSelect(false, 'Colors:');
         colorDisplay('JS shirt');
     }else {
-        hideShowColorSelect(true, 'Please select a T-shirt theme');
+        hideShowColorSelect(true, null);
     }
 })
 
@@ -96,3 +96,35 @@ activities.addEventListener('input', (e) => {
     }
     document.querySelector('#total-cost').innerText = `Total $${totalCost}`;
 });
+
+/***
+ *  Payment Info Section -- Refactor this later
+***/
+const paymentSelect = document.getElementById('payment');
+const creditCard = document.getElementById('credit-card');
+const paypal = document.getElementById('paypal');
+const bitcoin = document.getElementById('bitcoin');
+
+creditCard.hidden = true;
+paypal.hidden = true;
+bitcoin.hidden = true;
+
+paymentSelect.addEventListener('input', (e) => {
+    if (e.target.value === 'credit card') {
+        creditCard.hidden = false;
+        paypal.hidden = true;
+        bitcoin.hidden = true;
+    }else if(e.target.value === 'paypal') {
+        creditCard.hidden = true;
+        paypal.hidden = false;
+        bitcoin.hidden = true;
+    }else if(e.target.value === 'bitcoin') {
+        creditCard.hidden = true;
+        paypal.hidden = true;
+        bitcoin.hidden = false;
+    }else {
+        creditCard.hidden = true;
+        paypal.hidden = true;
+        bitcoin.hidden = true;;
+    }
+})
