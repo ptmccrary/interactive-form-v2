@@ -1,15 +1,27 @@
-// On page load focus on 'name' input field
-document.getElementById('name').focus();
-
 /*** 
- *  Job Role Section
+ *  Basic Info Section
 ***/
+const userName = document.getElementById('name');
+const userEmail = document.getElementById('mail');
+const userJobRole = document.getElementById('title');
 const otherJob = document.getElementById('other-title');
 otherJob.hidden = true;
-const jobSelect = document.getElementById('title');
+
+// On page load focus on 'name' input field
+userName.focus();
+
+// UserName
+userName.addEventListener('input', (e) => {
+    isValid(nameRegExp.test(e.target.value), e.target);
+});
+
+// Email
+userEmail.addEventListener('input', (e) => {
+    isValid(emailRegExp.test(e.target.value), e.target);
+});
 
 // if jobSelect = 'other' then show text input box
-jobSelect.addEventListener('input', (e) => {
+userJobRole.addEventListener('input', (e) => {
     if(e.target.value === 'other') {
         otherJob.hidden = false;
     }else {
@@ -20,8 +32,13 @@ jobSelect.addEventListener('input', (e) => {
 /***
  * T-Shirt Section
 ***/
+const userShirtDesign = document.getElementById('design');
+const userShirtColor = document.getElementById('colors-js-puns');
+userShirtColor.hidden = true;
+
 // Shows and hides color options && updates the label text content
 function hideShowColorSelect(showHide, textContent) {
+    userShirtColor.hidden = showHide;
     const colorSelect = document.getElementById('color');
     colorSelect.hidden = showHide;
     const colorLabel = document.querySelector('#colors-js-puns label');
@@ -41,10 +58,8 @@ function colorDisplay(string) {
     }
 }
 
-const designSelect = document.getElementById('design');
-
 // Based on design input, updates color options 
-designSelect.addEventListener('input', (e) => {
+userShirtDesign.addEventListener('input', (e) => {
     if(e.target.value === 'js puns'){
         hideShowColorSelect(false, 'Colors:');
         colorDisplay('JS Puns');
@@ -59,10 +74,11 @@ designSelect.addEventListener('input', (e) => {
 /***
  * Activites Section
 ***/
+const activities = document.querySelector('.activities');
+const userActivities = activities.querySelectorAll('input');
+
 // Creates activities total cost below checkboxes
 let totalCost = 0;
-const activities = document.querySelector('.activities');
-const activitiesList = activities.querySelectorAll('input');
 const activityTotal = document.createElement('DIV');
 activityTotal.innerHTML = `<p id='total-cost'>Total: $0`;
 activities.appendChild(activityTotal);
@@ -72,18 +88,18 @@ activities.addEventListener('input', (e) => {
     const click = e.target;
     const dateTime = click.getAttribute('data-day-and-time');
     
-    for(i = 0; i < activitiesList.length; i++) {
-        const listDateTime = activitiesList[i].getAttribute('data-day-and-time');
+    for(i = 0; i < userActivities.length; i++) {
+        const listDateTime = userActivities[i].getAttribute('data-day-and-time');
         
         // If date&time of event clicked = another date&time &&
         // event clicked doesn't equal input of event clicked, disable
-        if(dateTime === listDateTime && click !== activitiesList[i]) {
+        if(dateTime === listDateTime && click !== userActivities[i]) {
             if(click.checked === true) {
-                activitiesList[i].parentNode.style.color = 'grey';
-                activitiesList[i].disabled = true;
+                userActivities[i].parentNode.style.color = 'grey';
+                userActivities[i].disabled = true;
             }else if(click.checked === false) {
-                activitiesList[i].parentNode.style.color = '';
-                activitiesList[i].disabled = false;
+                userActivities[i].parentNode.style.color = '';
+                userActivities[i].disabled = false;
             }
         }
     }
@@ -100,7 +116,10 @@ activities.addEventListener('input', (e) => {
 /***
  *  Payment Info Section -- Refactor this later
 ***/
-const paymentSelect = document.getElementById('payment');
+const userPayment = document.getElementById('payment');
+const userCC = document.getElementById('cc-num');
+const userZip = document.getElementById('zip');
+const userCVV = document.getElementById('user-cvv');
 const creditCard = document.getElementById('credit-card');
 const paypal = document.getElementById('paypal');
 const bitcoin = document.getElementById('bitcoin');
@@ -109,7 +128,7 @@ creditCard.hidden = true;
 paypal.hidden = true;
 bitcoin.hidden = true;
 
-paymentSelect.addEventListener('input', (e) => {
+userPayment.addEventListener('input', (e) => {
     if (e.target.value === 'credit card') {
         creditCard.hidden = false;
         paypal.hidden = true;
@@ -128,3 +147,25 @@ paymentSelect.addEventListener('input', (e) => {
         bitcoin.hidden = true;;
     }
 })
+
+/***
+ *  Helpers
+***/
+// Regular Expressions
+
+const nameRegExp = /^[a-zA-Z][a-zA-Z\-' ]*[a-zA-Z ]$/;
+const emailRegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+const ccRegExp = /^((4\d{3})|(5[1-5]\d{2})|(6011))-?\d{4}-?\d{4}-?\d{4}|3[4,7]\d{13}$/;
+const zipRegExp = /^\d{5}$/;
+const cvvRegExp = /^([0-9]{3})$/;
+
+// validator
+function isValid(validator, element) {
+    if(validator) {
+        element.style.borderColor = 'lightgreen';
+        return true;
+    }else {
+        element.style.borderColor = 'red';
+        return false;
+    }
+}
