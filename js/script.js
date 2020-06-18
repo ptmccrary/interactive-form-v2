@@ -119,7 +119,7 @@ activities.addEventListener('input', (e) => {
 const userPayment = document.getElementById('payment');
 const userCC = document.getElementById('cc-num');
 const userZip = document.getElementById('zip');
-const userCVV = document.getElementById('user-cvv');
+const userCVV = document.getElementById('cvv');
 const creditCard = document.getElementById('credit-card');
 const paypal = document.getElementById('paypal');
 const bitcoin = document.getElementById('bitcoin');
@@ -146,6 +146,18 @@ userPayment.addEventListener('input', (e) => {
         paypal.hidden = true;
         bitcoin.hidden = true;;
     }
+})
+
+userCC.addEventListener('input', (e) => {
+    isValid(ccRegExp.test(e.target.value), e.target)
+})
+
+userZip.addEventListener('input', (e) => {
+    isValid(zipRegExp.test(e.target.value), e.target)
+})
+
+userCVV.addEventListener('input', (e) => {
+    isValid(cvvRegExp.test(e.target.value), e.target)
 })
 
 /***
