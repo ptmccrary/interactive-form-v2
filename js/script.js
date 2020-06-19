@@ -1,7 +1,9 @@
+const form = document.querySelector('form');
+form.reset();
+
 /*** 
  *  Basic Info Section
 ***/
-const form = document.querySelector('form');
 const userName = document.getElementById('name');
 const userEmail = document.getElementById('mail');
 const userJobRole = document.getElementById('title');
@@ -184,10 +186,10 @@ function errorContainer(id, parentNode, bool, message) {
     const parentElement = document.getElementById(parentNode);
     insertAfter(errorLi, parentElement);
 }
-
+let validInvalid;
 function validator(input, regExp, id, parentNode, message) {
-    input.addEventListener('input', (e) => {
-        if(regExp.test(e.target.value) === true) {
+    input.addEventListener('input', () => {
+        if(regExp.test(input.value) === true) {
             errorContainer(id, parentNode, true, message);
             inputBorder(input, 'lightgreen');
         }else {
@@ -197,17 +199,20 @@ function validator(input, regExp, id, parentNode, message) {
     });
 }
 
-// UserName Validation
+// Real Time Validation
+// UserName
 validator(userName, nameRegExp, 'nameError', 'name', 'Please enter a name more than 1 character long.');
 
-// Email Validation
+// Email
 validator(userEmail, emailRegExp, 'emailError', 'mail', 'Please enter a valid email address.');
 
-// Credit card validation
+// Credit card 
 validator(userCC, ccRegExp, 'ccError', 'cc-num', 'Please enter a credit card number 13-16 digits long.');
 
-// Zip code validation
+// Zip code
 validator(userZip, zipRegExp, 'zipError', 'zip', 'Please enter a valid zip code.');
 
-// CVV validation
+// CVV
 validator(userCVV, cvvRegExp, 'cvvError', 'cvv', 'Please enter a valid CVV.');
+
+// Submit Validation
