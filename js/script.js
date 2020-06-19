@@ -186,8 +186,8 @@ function errorContainer(id, parentNode, bool, message) {
     const parentElement = document.getElementById(parentNode);
     insertAfter(errorLi, parentElement);
 }
-let validInvalid;
-function validator(input, regExp, id, parentNode, message) {
+let valid;
+function realTimeValidator(input, regExp, id, parentNode, message) {
     input.addEventListener('input', () => {
         if(regExp.test(input.value) === true) {
             errorContainer(id, parentNode, true, message);
@@ -199,20 +199,41 @@ function validator(input, regExp, id, parentNode, message) {
     });
 }
 
+function validator(regExp, input) {
+    if(regExp.test(input) === true) {
+        return true;
+    }else {
+        return false;
+    }
+}
+
 // Real Time Validation
 // UserName
-validator(userName, nameRegExp, 'nameError', 'name', 'Please enter a name more than 1 character long.');
+realTimeValidator(userName, nameRegExp, 'nameError', 'name', 'Please enter a name more than 1 character long.');
 
 // Email
-validator(userEmail, emailRegExp, 'emailError', 'mail', 'Please enter a valid email address.');
+realTimeValidator(userEmail, emailRegExp, 'emailError', 'mail', 'Please enter a valid email address.');
 
 // Credit card 
-validator(userCC, ccRegExp, 'ccError', 'cc-num', 'Please enter a credit card number 13-16 digits long.');
+realTimeValidator(userCC, ccRegExp, 'ccError', 'cc-num', 'Please enter a credit card number 13-16 digits long.');
 
 // Zip code
-validator(userZip, zipRegExp, 'zipError', 'zip', 'Please enter a valid zip code.');
+realTimeValidator(userZip, zipRegExp, 'zipError', 'zip', 'Please enter a valid zip code.');
 
 // CVV
-validator(userCVV, cvvRegExp, 'cvvError', 'cvv', 'Please enter a valid CVV.');
+realTimeValidator(userCVV, cvvRegExp, 'cvvError', 'cvv', 'Please enter a valid CVV.');
 
 // Submit Validation
+document.querySelector('button').addEventListener('submit', () => {
+    if(
+        validator(nameRegExp, userName),
+        validator(emailRegExp, userEmail),
+        validator(ccRegExp, userCC),
+        validator(zipRegExp, userZip),
+        validator(cvvRegExp, userCVV) === true
+    ) {
+        console.log('yay');
+    }else {
+        console.log('oh no');
+    }
+})
