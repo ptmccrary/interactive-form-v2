@@ -156,9 +156,9 @@ const ccRegExp = /^(\d{4}-){3}\d{4}$|^(\d{4} ){3}\d{4}$|^\d{13,16}$/;
 const zipRegExp = /^\d{5}$/;
 const cvvRegExp = /^([0-9]{3})$/;
 
-
-// Adds a class to the 'basic info' fieldset
-document.getElementsByTagName('fieldset')[0].className = 'basic-info';
+function insertAfter(newNode, referenceNode) {
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+}
 
 // Creates div for the error messages
 const errorDiv = document.createElement('div');
@@ -174,40 +174,40 @@ function inputBorder(element, color) {
         element.style.borderColor = color;
 }
 
-function errorContainer(id, parentNode, bool, parentPlace, childPlace, message) {
+function errorContainer(id, parentNode, bool, message) {
     errorLi.innerText = message;
     errorLi.id = id;
     errorLi.style.color = 'red';
     errorLi.style.marginLeft = '10px';
     errorLi.style.fontSize = '14px';
     errorLi.hidden = bool;
-    const parentElement = document.getElementsByClassName(parentNode)[parentPlace];
-    parentElement.insertBefore(errorLi, parentElement.children[childPlace]);
+    const parentElement = document.getElementById(parentNode);
+    insertAfter(errorLi, parentElement);
 }
 
-function validator(input, regExp, id, parentNode, parentPlace, childPlace, message) {
+function validator(input, regExp, id, parentNode, message) {
     input.addEventListener('input', (e) => {
         if(regExp.test(e.target.value) === true) {
-            errorContainer(id, parentNode, true, parentPlace, childPlace, message);
+            errorContainer(id, parentNode, true, message);
             inputBorder(input, 'lightgreen');
         }else {
-            errorContainer(id, parentNode, false, parentPlace, childPlace, message);
+            errorContainer(id, parentNode, false, message);
             inputBorder(input, 'red');
         }
     });
 }
 
 // UserName Validation
-validator(userName, nameRegExp, 'nameError', 'basic-info', 0, 3, 'Please enter a name more than 1 character long.');
+validator(userName, nameRegExp, 'nameError', 'name', 'Please enter a name more than 1 character long.');
 
 // Email Validation
-validator(userEmail, emailRegExp, 'emailError', 'basic-info', 0, 6, 'Please enter a valid email address.');
+validator(userEmail, emailRegExp, 'emailError', 'mail', 'Please enter a valid email address.');
 
 // Credit card validation
-validator(userCC, ccRegExp, 'ccError', 'col-6', 0, 2, 'Please enter a credit card number 13-16 digits long.');
+validator(userCC, ccRegExp, 'ccError', 'cc-num', 'Please enter a credit card number 13-16 digits long.');
 
 // Zip code validation
-validator(userZip, zipRegExp, 'zipError', 'col-3', 0, 2, 'Please enter a valid zip code.');
+validator(userZip, zipRegExp, 'zipError', 'zip', 'Please enter a valid zip code.');
 
 // CVV validation
-validator(userCVV, cvvRegExp, 'cvvError', 'col-3', 1, 2, 'Please enter a valid CVV.');
+validator(userCVV, cvvRegExp, 'cvvError', 'cvv', 'Please enter a valid CVV.');
