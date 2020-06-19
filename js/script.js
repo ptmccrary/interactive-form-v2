@@ -1,6 +1,7 @@
 /*** 
  *  Basic Info Section
 ***/
+const form = document.querySelector('form');
 const userName = document.getElementById('name');
 const userEmail = document.getElementById('mail');
 const userJobRole = document.getElementById('title');
@@ -9,16 +10,6 @@ otherJob.hidden = true;
 
 // On page load focus on 'name' input field
 userName.focus();
-
-// UserName
-userName.addEventListener('input', (e) => {
-    isValid(nameRegExp.test(e.target.value), e.target);
-});
-
-// Email
-userEmail.addEventListener('input', (e) => {
-    isValid(emailRegExp.test(e.target.value), e.target);
-});
 
 // if jobSelect = 'other' then show text input box
 userJobRole.addEventListener('input', (e) => {
@@ -111,10 +102,16 @@ activities.addEventListener('input', (e) => {
         totalCost -= activityCost;
     }
     document.querySelector('#total-cost').innerText = `Total $${totalCost}`;
+    if(userActivities === 0) {
+        errorContainer('activityError', 'activities', false, 0, 9, 'Please select one or more activities.' );
+    }else {
+        errorContainer('activityError', 'activities', true, 0, 9, 'Please select one or more activities.' )
+
+    }
 });
 
 /***
- *  Payment Info Section -- Refactor this later
+ *  Payment Info Section
 ***/
 const userPayment = document.getElementById('payment');
 const userCC = document.getElementById('cc-num');
@@ -148,36 +145,69 @@ userPayment.addEventListener('input', (e) => {
     }
 })
 
-userCC.addEventListener('input', (e) => {
-    isValid(ccRegExp.test(e.target.value), e.target)
-})
-
-userZip.addEventListener('input', (e) => {
-    isValid(zipRegExp.test(e.target.value), e.target)
-})
-
-userCVV.addEventListener('input', (e) => {
-    isValid(cvvRegExp.test(e.target.value), e.target)
-})
-
 /***
- *  Helpers
+ *  Validation
 ***/
 // Regular Expressions
 
 const nameRegExp = /^[a-zA-Z][a-zA-Z\-' ]*[a-zA-Z ]$/;
 const emailRegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-const ccRegExp = /^((4\d{3})|(5[1-5]\d{2})|(6011))-?\d{4}-?\d{4}-?\d{4}|3[4,7]\d{13}$/;
+const ccRegExp = /^(\d{4}-){3}\d{4}$|^(\d{4} ){3}\d{4}$|^\d{13,16}$/;
 const zipRegExp = /^\d{5}$/;
 const cvvRegExp = /^([0-9]{3})$/;
 
-// validator
-function isValid(validator, element) {
-    if(validator) {
-        element.style.borderColor = 'lightgreen';
-        return true;
-    }else {
-        element.style.borderColor = 'red';
-        return false;
-    }
+
+// Adds a class to the 'basic info' fieldset
+document.getElementsByTagName('fieldset')[0].className = 'basic-info';
+
+// Creates div for the error messages
+const errorDiv = document.createElement('div');
+const errorList = document.createElement('ul');
+form.prepend(errorDiv);
+errorDiv.appendChild(errorList);
+const errorUl = document.createElement('ul');
+const errorLi = document.createElement('li');
+errorUl.appendChild(errorLi);
+
+// 
+function inputBorder(element, color) {
+        element.style.borderColor = color;
 }
+
+function errorContainer(id, parentNode, bool, parentPlace, childPlace, message) {
+    errorLi.innerText = message;
+    errorLi.id = id;
+    errorLi.style.color = 'red';
+    errorLi.style.marginLeft = '10px';
+    errorLi.style.fontSize = '14px';
+    errorLi.hidden = bool;
+    const parentElement = document.getElementsByClassName(parentNode)[parentPlace];
+    parentElement.insertBefore(errorLi, parentElement.children[childPlace]);
+}
+
+function validator(input, regExp, id, parentNode, parentPlace, childPlace, message) {
+    input.addEventListener('input', (e) => {
+        if(regExp.test(e.target.value) === true) {
+            errorContainer(id, parentNode, true, parentPlace, childPlace, message);
+            inputBorder(input, 'lightgreen');
+        }else {
+            errorContainer(id, parentNode, false, parentPlace, childPlace, message);
+            inputBorder(input, 'red');
+        }
+    });
+}
+
+// UserName Validation
+validator(userName, nameRegExp, 'nameError', 'basic-info', 0, 3, 'Please enter a name more than 1 character long.');
+
+// Email Validation
+validator(userEmail, emailRegExp, 'emailError', 'basic-info', 0, 6, 'Please enter a valid email address.');
+
+// Credit card validation
+validator(userCC, ccRegExp, 'ccError', 'col-6', 0, 2, 'Please enter a credit card number 13-16 digits long.');
+
+// Zip code validation
+validator(userZip, zipRegExp, 'zipError', 'col-3', 0, 2, 'Please enter a valid zip code.');
+
+// CVV validation
+validator(userCVV, cvvRegExp, 'cvvError', 'col-3', 1, 2, 'Please enter a valid CVV.');
