@@ -45,6 +45,7 @@ function colorDisplay(string) {
     for(let i = 0; i < colorOptions.length; i++) {
         if(colorOptions[i].textContent.includes(string)) {
             colorOptions[i].style.display = 'block';
+            colorOptions[i].selected = true;
         }else {
             colorOptions[i].style.display = 'none';
         }
@@ -117,20 +118,22 @@ const creditCard = document.getElementById('credit-card');
 const paypal = document.getElementById('paypal');
 const bitcoin = document.getElementById('bitcoin');
 
-creditCard.hidden = true;
+userPayment.children[1].selected = true;
+
+creditCard.hidden = false;
 paypal.hidden = true;
 bitcoin.hidden = true;
 
 userPayment.addEventListener('input', (e) => {
-    if (e.target.value === 'credit card') {
+    if (userPayment.value === 'credit card') {
         creditCard.hidden = false;
         paypal.hidden = true;
         bitcoin.hidden = true;
-    }else if(e.target.value === 'paypal') {
+    }else if(userPayment.value === 'paypal') {
         creditCard.hidden = true;
         paypal.hidden = false;
         bitcoin.hidden = true;
-    }else if(e.target.value === 'bitcoin') {
+    }else if(userPayment.value === 'bitcoin') {
         creditCard.hidden = true;
         paypal.hidden = true;
         bitcoin.hidden = false;
@@ -149,7 +152,6 @@ userPayment.addEventListener('input', (e) => {
 const nameRegExp = /^[a-zA-Z][a-zA-Z\-' ]*[a-zA-Z ]$/;
 const emailRegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 const validCCRegExp = /^(\d{4}-){3}\d{4}$|^(\d{4} ){3}\d{4}$|^\d{13,16}$/;
-const ccEnteredRegExp = /^\d$/;
 const zipRegExp = /^\d{5}$/;
 const cvvRegExp = /^([0-9]{3})$/;
 
@@ -212,7 +214,6 @@ realTimeValidator(userEmail, emailRegExp, 'emailError', '#mail', 'Please enter a
 
 // Credit card 
 realTimeValidator(userCC, validCCRegExp, 'ccError', '#cc-num', 'Please enter a credit card number 13-16 digits long.');
-realTimeValidator(userCC, ccEnteredRegExp, 'ccError2', '#cc-num', 'Please enter a credit card.');
 
 // Zip code
 realTimeValidator(userZip, zipRegExp, 'zipError', '#zip', 'Please enter a valid zip code.');
