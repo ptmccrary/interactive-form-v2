@@ -104,12 +104,6 @@ activities.addEventListener('input', (e) => {
         totalCost -= activityCost;
     }
     document.querySelector('#total-cost').innerText = `Total $${totalCost}`;
-    if(userActivities === 0) {
-        errorContainer('activityError', 'activities', false, 0, 9, 'Please select one or more activities.' );
-    }else {
-        errorContainer('activityError', 'activities', true, 0, 9, 'Please select one or more activities.' )
-
-    }
 });
 
 /***
@@ -154,7 +148,8 @@ userPayment.addEventListener('input', (e) => {
 
 const nameRegExp = /^[a-zA-Z][a-zA-Z\-' ]*[a-zA-Z ]$/;
 const emailRegExp = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-const ccRegExp = /^(\d{4}-){3}\d{4}$|^(\d{4} ){3}\d{4}$|^\d{13,16}$/;
+const validCCRegExp = /^(\d{4}-){3}\d{4}$|^(\d{4} ){3}\d{4}$|^\d{13,16}$/;
+const ccEnteredRegExp = /^\d$/;
 const zipRegExp = /^\d{5}$/;
 const cvvRegExp = /^([0-9]{3})$/;
 
@@ -171,22 +166,23 @@ const errorUl = document.createElement('ul');
 const errorLi = document.createElement('li');
 errorUl.appendChild(errorLi);
 
-// 
+// change border color
 function inputBorder(element, color) {
         element.style.borderColor = color;
 }
 
 function errorContainer(id, parentNode, bool, message) {
-    errorLi.innerText = message;
+    const parentElement = document.querySelector(parentNode);
+    const errorMessage = message;
+    errorLi.textContent = errorMessage;
     errorLi.id = id;
     errorLi.style.color = 'red';
     errorLi.style.marginLeft = '10px';
     errorLi.style.fontSize = '14px';
     errorLi.hidden = bool;
-    const parentElement = document.getElementById(parentNode);
     insertAfter(errorLi, parentElement);
 }
-let valid;
+
 function realTimeValidator(input, regExp, id, parentNode, message) {
     input.addEventListener('input', () => {
         if(regExp.test(input.value) === true) {
@@ -200,7 +196,7 @@ function realTimeValidator(input, regExp, id, parentNode, message) {
 }
 
 function validator(regExp, input) {
-    if(regExp.test(input) === true) {
+    if(regExp.test(input.value) === true) {
         return true;
     }else {
         return false;
@@ -209,31 +205,31 @@ function validator(regExp, input) {
 
 // Real Time Validation
 // UserName
-realTimeValidator(userName, nameRegExp, 'nameError', 'name', 'Please enter a name more than 1 character long.');
+realTimeValidator(userName, nameRegExp, 'nameError', '#name', 'Please enter a name more than 1 character long.');
 
 // Email
-realTimeValidator(userEmail, emailRegExp, 'emailError', 'mail', 'Please enter a valid email address.');
+realTimeValidator(userEmail, emailRegExp, 'emailError', '#mail', 'Please enter a valid email address.');
 
 // Credit card 
-realTimeValidator(userCC, ccRegExp, 'ccError', 'cc-num', 'Please enter a credit card number 13-16 digits long.');
+realTimeValidator(userCC, validCCRegExp, 'ccError', '#cc-num', 'Please enter a credit card number 13-16 digits long.');
+realTimeValidator(userCC, ccEnteredRegExp, 'ccError2', '#cc-num', 'Please enter a credit card.');
 
 // Zip code
-realTimeValidator(userZip, zipRegExp, 'zipError', 'zip', 'Please enter a valid zip code.');
+realTimeValidator(userZip, zipRegExp, 'zipError', '#zip', 'Please enter a valid zip code.');
 
 // CVV
-realTimeValidator(userCVV, cvvRegExp, 'cvvError', 'cvv', 'Please enter a valid CVV.');
+realTimeValidator(userCVV, cvvRegExp, 'cvvError', '#cvv', 'Please enter a valid CVV.');
 
 // Submit Validation
-document.querySelector('button').addEventListener('submit', () => {
+form.addEventListener('submit', () => {
     if(
-        validator(nameRegExp, userName),
-        validator(emailRegExp, userEmail),
-        validator(ccRegExp, userCC),
-        validator(zipRegExp, userZip),
-        validator(cvvRegExp, userCVV) === true
-    ) {
-        console.log('yay');
+        validator(nameRegExp, userName) === true &&
+        validator(emailRegExp, userEmail) === true &&
+        validator(validCCRegExp, userCC) === true &&
+        validator(zipRegExp, userZip) === true &&
+        validator(cvvRegExp, userCVV) === true) {
+            window.alert('Everything submitted successfully!');
     }else {
-        console.log('oh no');
+        window.alert(`One or more fields aren't filled out correctly.`);
     }
-})
+});
