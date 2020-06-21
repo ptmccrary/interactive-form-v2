@@ -203,7 +203,6 @@ function realTimeValidator(input, regExp, divID, liID, parentNode, message) {
 // Errors displayed if certain condition has been met when user hits submit
 function submitValidator(input, regExp, divID, liID, parentNode, message) {
     const divExists = document.getElementById(divID);
-    console.log(divExists);
     if(typeof(divExists) == 'undefined' && divExists == null) {
         createDiv(divID, liID, parentNode);
     }
@@ -239,6 +238,15 @@ function activityIsValid() {
     }
 }
 
+// Conditional validator
+function ccConditional() {
+    if(userCC.value == '') {
+        submitValidator(userCC, validCCRegExp, 'ccErrorDiv', 'ccErrorLi', '#cc-num', 'Please enter a credit card number 13-16 digits long.');
+        document.getElementById('ccErrorLi').textContent = 'Please enter a credit card';
+    }else {
+        submitValidator(userCC, validCCRegExp, 'ccErrorDiv', 'ccErrorLi', '#cc-num', 'Please enter a credit card number 13-16 digits long.');
+    }
+}
 
 // Real Time Validation
 // UserName
@@ -270,7 +278,7 @@ form.addEventListener('submit', (e) => {
         submitValidator(userName, nameRegExp, 'nameErrorDiv', 'nameErrorLi', '#name', 'Please enter a name more than 1 character long.');
         submitValidator(userEmail, emailRegExp, 'emailErrorDiv', 'emailErrorLi', '#mail', 'Please enter a valid email address.');
         activityIsValid();
-        submitValidator(userCC, validCCRegExp, 'ccErrorDiv', 'ccErrorLi', '#cc-num', 'Please enter a credit card number 13-16 digits long.');
+        ccConditional();
         submitValidator(userZip, zipRegExp, 'zipErrorDiv', 'zipErrorLi', '#zip', 'Please enter a valid zip code.');
         submitValidator(userCVV, cvvRegExp, 'cvvErrorDiv', 'cvvErrorLi', '#cvv', 'Please enter a valid CVV.');
         ;
