@@ -160,44 +160,59 @@ function insertAfter(newNode, referenceNode) {
 }
 
 // Creates div for the error messages
-const errorDiv = document.createElement('div');
-const errorList = document.createElement('ul');
-form.prepend(errorDiv);
-errorDiv.appendChild(errorList);
-const errorUl = document.createElement('ul');
-const errorLi = document.createElement('li');
-errorUl.appendChild(errorLi);
+// const errorDiv = document.createElement('div');
+// const errorUl = document.createElement('ul');
+// const errorLi = document.createElement('li');
+// errorDiv.appendChild(errorUl);
+// errorUl.appendChild(errorLi);
 
 // change border color
 function inputBorder(element, color) {
         element.style.borderColor = color;
 }
 
-function errorContainer(id, parentNode, bool, message) {
-    const parentElement = document.querySelector(parentNode);
-    const errorMessage = message;
-    errorLi.textContent = errorMessage;
-    errorLi.id = id;
-    errorLi.style.color = 'red';
-    errorLi.style.marginLeft = '10px';
-    errorLi.style.fontSize = '14px';
-    errorLi.hidden = bool;
-    insertAfter(errorLi, parentElement);
+function createDiv(divID, liID, parentNode) {
+    const errorDiv = document.createElement('div');
+    const errorUl = document.createElement('ul');
+    const errorLi = document.createElement('li');
+    errorDiv.appendChild(errorUl);
+    errorUl.appendChild(errorLi);
+    errorDiv.id = divID;
+    errorLi.id = liID;
+    errorDiv.hidden = true;
+    insertAfter(errorDiv, document.querySelector(parentNode));
 }
 
-function realTimeValidator(input, regExp, id, parentNode, message) {
+function error(bool, message, divID, liID) {
+    const errorLi = document.getElementById(liID);
+    const errorDiv = document.getElementById(divID);
+    errorLi.textContent = message;
+    errorLi.style.color = 'red';
+    errorDiv.hidden = bool;
+}
+
+function realTimeValidator(input, regExp, divID, liID, parentNode, message) {
+    createDiv(divID, liID, parentNode);
     input.addEventListener('input', () => {
         if(regExp.test(input.value) === true) {
-            errorContainer(id, parentNode, true, message);
+            error(true, message, divID, liID);
             inputBorder(input, 'lightgreen');
         }else {
-            errorContainer(id, parentNode, false, message);
+            error(false, message, divID, liID);
             inputBorder(input, 'red');
         }
     });
 }
 
-function validator(regExp, input) {
+function submitValidator(input, regExp, divID, liID, parentNode, message) {
+    createDiv(divID, liID, parentNode);
+    if(regExp.test(input.value) === false) {
+        error(false, message, divID, liID);
+        inputBorder(input, 'red');
+    }
+}
+
+function isValid(regExp, input) {
     if(regExp.test(input.value) === true) {
         return true;
     }else {
@@ -207,30 +222,36 @@ function validator(regExp, input) {
 
 // Real Time Validation
 // UserName
-realTimeValidator(userName, nameRegExp, 'nameError', '#name', 'Please enter a name more than 1 character long.');
+realTimeValidator(userName, nameRegExp, 'nameErrorDiv', 'nameErrorLi', '#name', 'Please enter a name more than 1 character long.');
 
 // Email
-realTimeValidator(userEmail, emailRegExp, 'emailError', '#mail', 'Please enter a valid email address.');
+realTimeValidator(userEmail, emailRegExp, 'emailErrorDiv', 'emailErrorLi', '#mail', 'Please enter a valid email address.');
 
 // Credit card 
-realTimeValidator(userCC, validCCRegExp, 'ccError', '#cc-num', 'Please enter a credit card number 13-16 digits long.');
+realTimeValidator(userCC, validCCRegExp, 'ccErrorDiv', 'ccErrorLi', '#cc-num', 'Please enter a credit card number 13-16 digits long.');
 
 // Zip code
-realTimeValidator(userZip, zipRegExp, 'zipError', '#zip', 'Please enter a valid zip code.');
+realTimeValidator(userZip, zipRegExp, 'zipErrorDiv', 'zipErrorLi', '#zip', 'Please enter a valid zip code.');
 
 // CVV
-realTimeValidator(userCVV, cvvRegExp, 'cvvError', '#cvv', 'Please enter a valid CVV.');
+realTimeValidator(userCVV, cvvRegExp, 'cvvErrorDiv', 'cvvErrorLi', '#cvv', 'Please enter a valid CVV.');
 
 // Submit Validation
-form.addEventListener('submit', () => {
+form.addEventListener('submit', (e) => {
     if(
-        validator(nameRegExp, userName) === true &&
-        validator(emailRegExp, userEmail) === true &&
-        validator(validCCRegExp, userCC) === true &&
-        validator(zipRegExp, userZip) === true &&
-        validator(cvvRegExp, userCVV) === true) {
+        isValid(nameRegExp, userName) === true &&
+        isValid(emailRegExp, userEmail) === true &&
+        isValid(validCCRegExp, userCC) === true &&
+        isValid(zipRegExp, userZip) === true &&
+        isValid(cvvRegExp, userCVV) === true) {
             window.alert('Everything submitted successfully!');
     }else {
-        window.alert(`One or more fields aren't filled out correctly.`);
+        submitValidator(userName, nameRegExp, 'nameErrorDiv', 'nameErrorLi', '#name', 'Please enter a name more than 1 character long.');
+        submitValidator(userEmail, emailRegExp, 'emailErrorDiv', 'emailErrorLi', '#mail', 'Please enter a valid email address.');
+        submitValidator(userCC, validCCRegExp, 'ccErrorDiv', 'ccErrorLi', '#cc-num', 'Please enter a credit card number 13-16 digits long.');
+        submitValidator(userZip, zipRegExp, 'zipErrorDiv', 'zipErrorLi', '#zip', 'Please enter a valid zip code.');
+        submitValidator(userCVV, cvvRegExp, 'cvvErrorDiv', 'cvvErrorLi', '#cvv', 'Please enter a valid CVV.');
+        ;
     }
+    e.preventDefault();
 });
