@@ -276,6 +276,7 @@ form.addEventListener('submit', (e) => {
         isValid(cvvRegExp, userCVV) === true) {
             window.alert('Everything submitted successfully!');
     }else {
+        window.alert('One or more fields have been filled out incorrectly')
         submitValidator(userName, nameRegExp, 'nameErrorDiv', 'nameErrorLi', '#name', 'Please enter a name more than 1 character long.');
         submitValidator(userEmail, emailRegExp, 'emailErrorDiv', 'emailErrorLi', '#mail', 'Please enter a valid email address.');
         activityIsValid();
@@ -285,4 +286,5 @@ form.addEventListener('submit', (e) => {
         ;
     }
     e.preventDefault();
+    window.scrollTo(0, 0);
 });
