@@ -224,16 +224,17 @@ function isValid(regExp, input) {
 // Validation for activity checkboxes
 function activityIsValid() {
     let checkedBoxes = 0;
+    const legend = document.querySelector('.activities legend');
     for(i = 0; i < userActivities.length; i++) {
         if(userActivities[i].checked) {
             checkedBoxes++;
         }
     }
     if(checkedBoxes === 0) {
-        document.querySelector('.activities legend').style.color = 'red';
+        createDiv('activityErrorDiv', 'activityErrorLi', '.activities legend');
+        error(false, 'Please select at least one activity', 'activityErrorDiv', 'activityErrorLi')
         return false;
     }else {
-        document.querySelector('.activities legend').style.color = ''
         return true;
     }
 }
