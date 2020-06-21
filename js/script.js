@@ -164,6 +164,7 @@ function inputBorder(element, color) {
         element.style.borderColor = color;
 }
 
+// Creates error div for each input element
 function createDiv(divID, liID, parentNode) {
     const errorDiv = document.createElement('div');
     const errorUl = document.createElement('ul');
@@ -176,6 +177,7 @@ function createDiv(divID, liID, parentNode) {
     insertAfter(errorDiv, document.querySelector(parentNode));
 }
 
+// Error that will be displayed if condition is true
 function error(bool, message, divID, liID) {
     const errorLi = document.getElementById(liID);
     const errorDiv = document.getElementById(divID);
@@ -184,6 +186,7 @@ function error(bool, message, divID, liID) {
     errorDiv.hidden = bool;
 }
 
+// Checks to see if condition has been met as user types
 function realTimeValidator(input, regExp, divID, liID, parentNode, message) {
     createDiv(divID, liID, parentNode);
     input.addEventListener('input', () => {
@@ -197,6 +200,7 @@ function realTimeValidator(input, regExp, divID, liID, parentNode, message) {
     });
 }
 
+// Errors displayed if certain condition has been met when user hits submit
 function submitValidator(input, regExp, divID, liID, parentNode, message) {
     const divExists = document.getElementById(divID);
     console.log(divExists);
@@ -209,7 +213,7 @@ function submitValidator(input, regExp, divID, liID, parentNode, message) {
     }
 }
 
-
+// Checks to see if the input has been filled out 
 function isValid(regExp, input) {
     if(regExp.test(input.value) === true) {
         return true;
@@ -218,6 +222,7 @@ function isValid(regExp, input) {
     }
 }
 
+// Validation for activity checkboxes
 function activityIsValid() {
     let checkedBoxes = 0;
     for(i = 0; i < userActivities.length; i++) {
