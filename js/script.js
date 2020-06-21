@@ -159,13 +159,6 @@ function insertAfter(newNode, referenceNode) {
     referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
 
-// Creates div for the error messages
-// const errorDiv = document.createElement('div');
-// const errorUl = document.createElement('ul');
-// const errorLi = document.createElement('li');
-// errorDiv.appendChild(errorUl);
-// errorUl.appendChild(errorLi);
-
 // change border color
 function inputBorder(element, color) {
         element.style.borderColor = color;
@@ -205,12 +198,17 @@ function realTimeValidator(input, regExp, divID, liID, parentNode, message) {
 }
 
 function submitValidator(input, regExp, divID, liID, parentNode, message) {
-    createDiv(divID, liID, parentNode);
+    const divExists = document.getElementById(divID);
+    console.log(divExists);
+    if(typeof(divExists) == 'undefined' && divExists == null) {
+        createDiv(divID, liID, parentNode);
+    }
     if(regExp.test(input.value) === false) {
         error(false, message, divID, liID);
         inputBorder(input, 'red');
     }
 }
+
 
 function isValid(regExp, input) {
     if(regExp.test(input.value) === true) {
@@ -219,6 +217,23 @@ function isValid(regExp, input) {
         return false;
     }
 }
+
+function activityIsValid() {
+    let checkedBoxes = 0;
+    for(i = 0; i < userActivities.length; i++) {
+        if(userActivities[i].checked) {
+            checkedBoxes++;
+        }
+    }
+    if(checkedBoxes === 0) {
+        document.querySelector('.activities legend').style.color = 'red';
+        return false;
+    }else {
+        document.querySelector('.activities legend').style.color = ''
+        return true;
+    }
+}
+
 
 // Real Time Validation
 // UserName
@@ -241,6 +256,7 @@ form.addEventListener('submit', (e) => {
     if(
         isValid(nameRegExp, userName) === true &&
         isValid(emailRegExp, userEmail) === true &&
+        activityIsValid() === true &&
         isValid(validCCRegExp, userCC) === true &&
         isValid(zipRegExp, userZip) === true &&
         isValid(cvvRegExp, userCVV) === true) {
@@ -248,6 +264,7 @@ form.addEventListener('submit', (e) => {
     }else {
         submitValidator(userName, nameRegExp, 'nameErrorDiv', 'nameErrorLi', '#name', 'Please enter a name more than 1 character long.');
         submitValidator(userEmail, emailRegExp, 'emailErrorDiv', 'emailErrorLi', '#mail', 'Please enter a valid email address.');
+        activityIsValid();
         submitValidator(userCC, validCCRegExp, 'ccErrorDiv', 'ccErrorLi', '#cc-num', 'Please enter a credit card number 13-16 digits long.');
         submitValidator(userZip, zipRegExp, 'zipErrorDiv', 'zipErrorLi', '#zip', 'Please enter a valid zip code.');
         submitValidator(userCVV, cvvRegExp, 'cvvErrorDiv', 'cvvErrorLi', '#cvv', 'Please enter a valid CVV.');
