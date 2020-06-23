@@ -43,9 +43,12 @@ function colorDisplay(string) {
     const colorOptions = document.getElementById('color').children;
 
     for(let i = 0; i < colorOptions.length; i++) {
-        if(colorOptions[i].textContent.includes(string)) {
+        if(colorOptions[i].textContent.includes('JS Puns') && userShirtDesign.value === 'js puns') {
             colorOptions[i].style.display = 'block';
-            colorOptions[i].selected = true;
+            colorOptions[0].selected = true;
+        }else if(colorOptions[i].textContent.includes('JS shirt') && userShirtDesign.value === 'heart js') {
+            colorOptions[i].style.display = 'block';
+            colorOptions[3].selected = true;
         }else {
             colorOptions[i].style.display = 'none';
         }
