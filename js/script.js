@@ -248,30 +248,29 @@ function activityIsValid() {
 }
 
 // Conditional validator
-function ccConditional() {
-    if(userCC.value == '') {
-        submitValidator(userCC, validCCRegExp, 'ccErrorDiv', 'ccErrorLi', '#cc-num', 'Please enter a credit card number 13-16 digits long.');
-        document.getElementById('ccErrorLi').textContent = 'Please enter a credit card';
+function conditionalValidator(input, regExp, divID, liID, parentNode, message1, message2) {
+    if(input.value == '') {
+        submitValidator(input, regExp, divID, liID, parentNode, message1);
     }else {
-        submitValidator(userCC, validCCRegExp, 'ccErrorDiv', 'ccErrorLi', '#cc-num', 'Please enter a credit card number 13-16 digits long.');
+        submitValidator(input, regExp, divID, liID, parentNode, message2);
     }
 }
 
 // Real Time Validation
 // UserName
-realTimeValidator(userName, nameRegExp, 'nameErrorDiv', 'nameErrorLi', '#name', 'Please enter a name more than 1 character long.');
+realTimeValidator(userName, nameRegExp, 'nameErrorDiv', 'nameErrorLi', '#name', 'Please enter a name more than 1 character long');
 
 // Email
-realTimeValidator(userEmail, emailRegExp, 'emailErrorDiv', 'emailErrorLi', '#mail', 'Please enter a valid email address.');
+realTimeValidator(userEmail, emailRegExp, 'emailErrorDiv', 'emailErrorLi', '#mail', 'Please enter a valid email address: example@domain.com');
 
 // Credit card 
-realTimeValidator(userCC, validCCRegExp, 'ccErrorDiv', 'ccErrorLi', '#cc-num', 'Please enter a credit card number 13-16 digits long.');
+realTimeValidator(userCC, validCCRegExp, 'ccErrorDiv', 'ccErrorLi', '#cc-num', 'Please enter a credit card 13-16 digits long');
 
 // Zip code
-realTimeValidator(userZip, zipRegExp, 'zipErrorDiv', 'zipErrorLi', '#zip', 'Please enter a valid zip code.');
+realTimeValidator(userZip, zipRegExp, 'zipErrorDiv', 'zipErrorLi', '#zip', 'Please enter a valid zip code');
 
 // CVV
-realTimeValidator(userCVV, cvvRegExp, 'cvvErrorDiv', 'cvvErrorLi', '#cvv', 'Please enter a valid CVV.');
+realTimeValidator(userCVV, cvvRegExp, 'cvvErrorDiv', 'cvvErrorLi', '#cvv', 'Please enter a valid CVV');
 
 // Submit Validation
 form.addEventListener('submit', (e) => {
@@ -285,12 +284,12 @@ form.addEventListener('submit', (e) => {
             isValid(zipRegExp, userZip) === false ||
             isValid(cvvRegExp, userCVV) === false
         ) {
-            submitValidator(userName, nameRegExp, 'nameErrorDiv', 'nameErrorLi', '#name', 'Please enter a name more than 1 character long.');
-            submitValidator(userEmail, emailRegExp, 'emailErrorDiv', 'emailErrorLi', '#mail', 'Please enter a valid email address.');
+            conditionalValidator(userName, nameRegExp, 'nameErrorDiv', 'nameErrorLi', '#name', 'Please enter a name', 'Name must be more than one character, containing no numbers or invalid characters');
+            conditionalValidator(userEmail, emailRegExp, 'emailErrorDiv', 'emailErrorLi', '#mail', 'Please enter a valid email address', 'Email address must contain a single @ and a valid domain after the @');
             activityIsValid();
-            ccConditional();
-            submitValidator(userZip, zipRegExp, 'zipErrorDiv', 'zipErrorLi', '#zip', 'Please enter a valid zip code.');
-            submitValidator(userCVV, cvvRegExp, 'cvvErrorDiv', 'cvvErrorLi', '#cvv', 'Please enter a valid CVV.');
+            conditionalValidator(userCC, validCCRegExp, 'ccErrorDiv', 'ccErrorLi', '#cc-num', 'Please enter a credit card', 'Please enter a credit card number 13-16 digits long');
+            conditionalValidator(userZip, zipRegExp, 'zipErrorDiv', 'zipErrorLi', '#zip', 'Please enter a valid zip code', 'Zip code must be 5 digits long');
+            conditionalValidator(userCVV, cvvRegExp, 'cvvErrorDiv', 'cvvErrorLi', '#cvv', 'Please enter a valid CVV', 'CVV must be 3 digits long');
             e.preventDefault();
         }
     }else if(userPayment.value === 'paypal' || userPayment.value === 'bitcoin') {
@@ -300,8 +299,8 @@ form.addEventListener('submit', (e) => {
             isValid(emailRegExp, userEmail) === false ||
             activityIsValid() === false
         ) {
-            submitValidator(userName, nameRegExp, 'nameErrorDiv', 'nameErrorLi', '#name', 'Please enter a name more than 1 character long.');
-            submitValidator(userEmail, emailRegExp, 'emailErrorDiv', 'emailErrorLi', '#mail', 'Please enter a valid email address.');
+            conditionalValidator(userName, nameRegExp, 'nameErrorDiv', 'nameErrorLi', '#name', 'Please enter a name', 'Name must be more than one character, containing no numbers or invalid characters');
+            conditionalValidator(userEmail, emailRegExp, 'emailErrorDiv', 'emailErrorLi', '#mail', 'Please enter a valid email address', 'Email address must contain a single @ and a valid domain after the @');
             activityIsValid();
             e.preventDefault();
         }
