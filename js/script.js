@@ -290,6 +290,7 @@ form.addEventListener('submit', (e) => {
             ccConditional();
             submitValidator(userZip, zipRegExp, 'zipErrorDiv', 'zipErrorLi', '#zip', 'Please enter a valid zip code.');
             submitValidator(userCVV, cvvRegExp, 'cvvErrorDiv', 'cvvErrorLi', '#cvv', 'Please enter a valid CVV.');
+            e.preventDefault();
         }
     }else if(userPayment.value === 'paypal' || userPayment.value === 'bitcoin') {
         if
@@ -301,8 +302,8 @@ form.addEventListener('submit', (e) => {
             submitValidator(userName, nameRegExp, 'nameErrorDiv', 'nameErrorLi', '#name', 'Please enter a name more than 1 character long.');
             submitValidator(userEmail, emailRegExp, 'emailErrorDiv', 'emailErrorLi', '#mail', 'Please enter a valid email address.');
             activityIsValid();
+            e.preventDefault();
         }
     }
-    e.preventDefault();
     window.scrollTo(0, 0);
 });
