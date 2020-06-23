@@ -268,15 +268,15 @@ realTimeValidator(userCVV, cvvRegExp, 'cvvErrorDiv', 'cvvErrorLi', '#cvv', 'Plea
 // Submit Validation
 form.addEventListener('submit', (e) => {
     if(userPayment.value === 'credit card') {
-        if(
-            isValid(nameRegExp, userName) === true &&
-            isValid(emailRegExp, userEmail) === true &&
-            activityIsValid() === true &&
-            isValid(validCCRegExp, userCC) === true &&
-            isValid(zipRegExp, userZip) === true &&
-            isValid(cvvRegExp, userCVV) === true) {
-                window.alert('Everything submitted successfully!');
-        }else {
+        if
+        (
+            isValid(nameRegExp, userName) === false ||
+            isValid(emailRegExp, userEmail) === false ||
+            activityIsValid() === false ||
+            isValid(validCCRegExp, userCC) === false ||
+            isValid(zipRegExp, userZip) === false ||
+            isValid(cvvRegExp, userCVV) === false
+        ) {
             submitValidator(userName, nameRegExp, 'nameErrorDiv', 'nameErrorLi', '#name', 'Please enter a name more than 1 character long.');
             submitValidator(userEmail, emailRegExp, 'emailErrorDiv', 'emailErrorLi', '#mail', 'Please enter a valid email address.');
             activityIsValid();
@@ -287,12 +287,10 @@ form.addEventListener('submit', (e) => {
     }else if(userPayment.value === 'paypal' || userPayment.value === 'bitcoin') {
         if
         (
-            isValid(nameRegExp, userName) === true &&
-            isValid(emailRegExp, userEmail) === true &&
-            activityIsValid() === true
+            isValid(nameRegExp, userName) === false ||
+            isValid(emailRegExp, userEmail) === false ||
+            activityIsValid() === false
         ) {
-            window.alert('Everything is submitted successfully');
-        } else {
             submitValidator(userName, nameRegExp, 'nameErrorDiv', 'nameErrorLi', '#name', 'Please enter a name more than 1 character long.');
             submitValidator(userEmail, emailRegExp, 'emailErrorDiv', 'emailErrorLi', '#mail', 'Please enter a valid email address.');
             activityIsValid();
