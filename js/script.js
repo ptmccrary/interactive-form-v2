@@ -121,6 +121,7 @@ const creditCard = document.getElementById('credit-card');
 const paypal = document.getElementById('paypal');
 const bitcoin = document.getElementById('bitcoin');
 
+userPayment.children[0].hidden = true;
 userPayment.children[1].selected = true;
 
 creditCard.hidden = false;
