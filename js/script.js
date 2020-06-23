@@ -206,7 +206,7 @@ function realTimeValidator(input, regExp, divID, liID, parentNode, message) {
 // Errors displayed if certain condition has been met when user hits submit
 function submitValidator(input, regExp, divID, liID, parentNode, message) {
     const divExists = document.getElementById(divID);
-    if(typeof(divExists) == 'undefined' && divExists == null) {
+    if(typeof(divExists) == 'undefined' || divExists == null) {
         createDiv(divID, liID, parentNode);
     }
     if(regExp.test(input.value) === false) {
@@ -227,17 +227,21 @@ function isValid(regExp, input) {
 // Validation for activity checkboxes
 function activityIsValid() {
     let checkedBoxes = 0;
-    const legend = document.querySelector('.activities legend');
     for(i = 0; i < userActivities.length; i++) {
         if(userActivities[i].checked) {
             checkedBoxes++;
         }
     }
-    if(checkedBoxes === 0) {
+
+    const divExists = document.getElementById('activityErrorDiv');
+    if(typeof(divExists) == 'undefined' || divExists == null) {
         createDiv('activityErrorDiv', 'activityErrorLi', '.activities legend');
-        error(false, 'Please select at least one activity', 'activityErrorDiv', 'activityErrorLi')
+    }
+    if(checkedBoxes === 0) {
+        error(false, 'Please select at least one activity', 'activityErrorDiv', 'activityErrorLi');
         return false;
     }else {
+        error(true, 'Please select at least one activity', 'activityErrorDiv', 'activityErrorLi');
         return true;
     }
 }
