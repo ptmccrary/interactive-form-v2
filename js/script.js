@@ -267,23 +267,36 @@ realTimeValidator(userCVV, cvvRegExp, 'cvvErrorDiv', 'cvvErrorLi', '#cvv', 'Plea
 
 // Submit Validation
 form.addEventListener('submit', (e) => {
-    if(
-        isValid(nameRegExp, userName) === true &&
-        isValid(emailRegExp, userEmail) === true &&
-        activityIsValid() === true &&
-        isValid(validCCRegExp, userCC) === true &&
-        isValid(zipRegExp, userZip) === true &&
-        isValid(cvvRegExp, userCVV) === true) {
-            window.alert('Everything submitted successfully!');
-    }else {
-        window.alert('One or more fields have been filled out incorrectly')
-        submitValidator(userName, nameRegExp, 'nameErrorDiv', 'nameErrorLi', '#name', 'Please enter a name more than 1 character long.');
-        submitValidator(userEmail, emailRegExp, 'emailErrorDiv', 'emailErrorLi', '#mail', 'Please enter a valid email address.');
-        activityIsValid();
-        ccConditional();
-        submitValidator(userZip, zipRegExp, 'zipErrorDiv', 'zipErrorLi', '#zip', 'Please enter a valid zip code.');
-        submitValidator(userCVV, cvvRegExp, 'cvvErrorDiv', 'cvvErrorLi', '#cvv', 'Please enter a valid CVV.');
-        ;
+    if(userPayment.value === 'credit card') {
+        if(
+            isValid(nameRegExp, userName) === true &&
+            isValid(emailRegExp, userEmail) === true &&
+            activityIsValid() === true &&
+            isValid(validCCRegExp, userCC) === true &&
+            isValid(zipRegExp, userZip) === true &&
+            isValid(cvvRegExp, userCVV) === true) {
+                window.alert('Everything submitted successfully!');
+        }else {
+            submitValidator(userName, nameRegExp, 'nameErrorDiv', 'nameErrorLi', '#name', 'Please enter a name more than 1 character long.');
+            submitValidator(userEmail, emailRegExp, 'emailErrorDiv', 'emailErrorLi', '#mail', 'Please enter a valid email address.');
+            activityIsValid();
+            ccConditional();
+            submitValidator(userZip, zipRegExp, 'zipErrorDiv', 'zipErrorLi', '#zip', 'Please enter a valid zip code.');
+            submitValidator(userCVV, cvvRegExp, 'cvvErrorDiv', 'cvvErrorLi', '#cvv', 'Please enter a valid CVV.');
+        }
+    }else if(userPayment.value === 'paypal' || userPayment.value === 'bitcoin') {
+        if
+        (
+            isValid(nameRegExp, userName) === true &&
+            isValid(emailRegExp, userEmail) === true &&
+            activityIsValid() === true
+        ) {
+            window.alert('Everything is submitted successfully');
+        } else {
+            submitValidator(userName, nameRegExp, 'nameErrorDiv', 'nameErrorLi', '#name', 'Please enter a name more than 1 character long.');
+            submitValidator(userEmail, emailRegExp, 'emailErrorDiv', 'emailErrorLi', '#mail', 'Please enter a valid email address.');
+            activityIsValid();
+        }
     }
     e.preventDefault();
     window.scrollTo(0, 0);
