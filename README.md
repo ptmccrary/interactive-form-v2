@@ -1,5 +1,13 @@
 # interactive-form v2
- 
-Form uses regular expressions to validate user input in real time and on submit click.
-If a field is entered incorrectly the input border will turn red and/or an error message will appear.
-Updates activities in real time so user can't sign up for an activity that is conflicting with another.
+
+Makes the use of JavaScript to enhance an interactive registration form for a fictional conference called "FullStack Conf."
+
+## Usage
+
+- If the 'other' job role is selected, a text input field will be appended to the page.
+<br>
+- The T-Shirt colors are automatically updated based on the design the user selects. 
+<br>
+- The payment type is automatically updated based on the payment the user selects.
+<br>
+- All fields are validated in real time with regular expressions based on the info needed for the input
